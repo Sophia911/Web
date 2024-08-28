@@ -163,6 +163,10 @@ export default {
                 message: "上传成功",
                 type: "success",
               });
+            //   // 清空表单数据
+            // this.clearFormData();
+            location.reload()
+            
             } else {
               this.$message({
                 message: "上传失败,原因：" + response.data.msg,
@@ -187,6 +191,14 @@ export default {
         });
       }
     },
+    clearFormData() {
+    // 清空表单数据和状态
+    this.$refs.form.resetFields();
+    this.videoUrl = [];
+    this.imgUrl = [];
+    this.title = "";
+    this.type = "";
+  },
   },
 };
 </script>

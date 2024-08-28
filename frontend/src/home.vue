@@ -53,9 +53,11 @@
 </template>
 <script>
 import axios from 'axios';
+import { ref, getCurrentInstance, reactive, onMounted } from 'vue';
 import {useRouter} from 'vue-router'
+import { themeBus } from './eventBus.js';
+import { watch } from 'vue';
 import {Swiper, SwiperSlide} from '../node_modules/swiper/vue/swiper-vue.js';
-import {onMounted, reactive, getCurrentInstance} from 'vue';
 import "../node_modules/swiper/swiper-bundle.min.css"
 import SwiperCore, {Navigation, Pagination, Scrollbar, A11y, Autoplay} from 'swiper';
 
@@ -94,7 +96,7 @@ export default {
         });
       })
       if((cns.appContext.config.globalProperties.$theme=localStorage.getItem('theme'))==null){
-        cns.appContext.config.globalProperties.$theme="西河大鼓"
+        cns.appContext.config.globalProperties.$theme="国画颜料制作"
       }
       console.log(cns.appContext.config.globalProperties.$theme)
       axios.post(url + "MainInterface/getBaseURL", {
@@ -110,6 +112,34 @@ export default {
           console.log(CarouselChartImg)
         })
     })
+    watch(themeBus, (newTheme) => {
+      loadThemeData(newTheme);
+    });
+    const loadThemeData = (theme) => {
+
+      axios.post(url + "MainInterface/getBaseURL", {
+        Theme: theme
+      }).then(response => {
+        CarouselChartImg.inofrom = []; // 清空当前的图片数据
+        Bg.url = []; // 清空当前背景数据
+
+        CarouselChartImg.inofrom.push({ url: response.data.data.carouselImg_1 });
+        CarouselChartImg.inofrom.push({ url: response.data.data.carouselImg_2 });
+        CarouselChartImg.inofrom.push({ url: response.data.data.carouselImg_3 });
+        CarouselChartImg.inofrom.push({ url: response.data.data.carouselImg_4 });
+        CarouselChartImg.inofrom.push({ url: response.data.data.carouselImg_5 });
+        Bg.url.push('background-image: url("' + response.data.data.backgroundImg + '")');
+        Bg.url.push('background-image: url("' + response.data.data.videoRecommendImg + '")');
+        console.log(CarouselChartImg);
+      });
+    };
+
+    return {
+      VideoInterface,
+      CarouselChartImg,
+      Bg,
+      modules: [Navigation, Pagination, Scrollbar, A11y]
+    };
     const onSwiper = (swiper) => {
     };
     const onSlideChange = () => {
@@ -123,6 +153,31 @@ export default {
       Bg
     };
   },
+// 监听 themeBus 的变化
+
+
+  // watch: {
+  //   currentTheme(newTheme) {
+  //     // 主题变化时，调用 axios 刷新轮播图
+  //     console.log("watch")
+  //     this.updateCarousel(newTheme)
+  //     async () => { 
+
+  //     axios.post(url + "MainInterface/getBaseURL", {
+  //         Theme:newTheme
+  //       }).then(response => {
+  //         CarouselChartImg.inofrom.push({url:response.data.data.carouselImg_1})
+  //         CarouselChartImg.inofrom.push({url:response.data.data.carouselImg_2})
+  //         CarouselChartImg.inofrom.push({url:response.data.data.carouselImg_3})
+  //         CarouselChartImg.inofrom.push({url:response.data.data.carouselImg_4})
+  //         CarouselChartImg.inofrom.push({url:response.data.data.carouselImg_5})
+  //         Bg.url.push('background-image: url("'+response.data.data.backgroundImg+'")')
+  //         Bg.url.push('background-image: url("'+response.data.data.videoRecommendImg+'")')
+  //         console.log(CarouselChartImg)
+  //       })}
+  //   }
+    
+  // },
   data() {
     return {
       renew: "renew renew-blur",

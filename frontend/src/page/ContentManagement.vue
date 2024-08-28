@@ -27,9 +27,10 @@
                         placeholder="输入验证码">
                     <h5 class="get-verification-code" v-if="!this.$data.getVerificationCode"
                         @click="userGetVerificationCode" @mousemove="focusUserGetVerificationCode"
-                        @mouseleave="blurUserGetVerificationCode" :style="this.$data.getVerificationCodeColor">点击以获取验证码</h5>
+                        @mouseleave="blurUserGetVerificationCode" :style="this.$data.getVerificationCodeColor">点击以获取验证码
+                    </h5>
                     <h5 class="get-verification-code" v-if="this.$data.getVerificationCode">已发送{{ this.$data.validTime
-                    }}s内有效
+                        }}s内有效
                     </h5>
                 </div>
             </div>
@@ -74,7 +75,7 @@ export default {
         ManageVideo,
         ManagePersonPage
     },
-    setup() {
+    setup () {
         const cns = getCurrentInstance()
         let url = cns.appContext.config.globalProperties.$url
         let MenuItem = reactive({
@@ -117,8 +118,8 @@ export default {
                                 MenuItem.Options.push({ item: "视频审核", title: Options_list2[0], op: Options_list2.slice(1) })
                                 MenuItem.inform.push({ name: "主题风格", color: opColor, chose: false, content: 0 })
                                 MenuItem.Options.push({ item: "主题风格", title: Options_list1[0], op: Options_list1.slice(1) })
-                                // MenuItem.inform.push({name:"关于界面",color:opColor,chose:false,content:3})
-                                // MenuItem.Options.push({item:"关于界面",title:Options_list4[0],op:Options_list4.slice(1)})
+                                MenuItem.inform.push({name:"主题信息",color:opColor,chose:false,content:3})
+                                MenuItem.Options.push({item:"主题信息",title:Options_list4[0],op:Options_list4.slice(1)})
                                 break;
                         }
 
@@ -136,7 +137,7 @@ export default {
             MenuItem
         }
     },
-    data() {
+    data () {
         return {
             showFunctionOptions: true,
             showConfirmTable: false,
@@ -215,99 +216,60 @@ export default {
         blurFunction: function (op) {
             op.color = "background-color: rgb(236, 207, 170);"
         },
-        // confirmSubmission: function () {
-        //     if (this.$data.VerificationCode == "") {
-        //         alert("请输入验证码！")
-        //     } else {
-        //         if (!isNaN(Number(this.$data.VerificationCode))) {
-        //             this.$data.themeOp = { name: "", func: "confirm" }
-        //             const that = this
-        //             axios.post(this.$url + "/ContentManagement/checkVerificationCode", {
-        //                 "UserPowerCheck": {
-        //                     "id": this.$user.userName,
-        //                     "token": this.$user.token,
-        //                 },
-        //                 "UserVerificationCode": {
-        //                     "mail": this.$user.userName,
-        //                     "Code": this.$data.VerificationCode
-        //                 }
-        //             }).then(response => {
-        //                 if (response.data.data) {
-        //                     that.$data.VerificationCode = ""
-        //                     that.$data.showConfirmTable = false
-        //                     clearInterval(that.timer)
-        //                     that.$data.getVerificationCode = false
-        //                     that.$data.getVerificationCodeColor = "color: black;"
-        //                     that.$data.themeOp = { name: "", func: "confirm" }
-        //                 }
-        //                 else {
-        //                     this.$message({
-        //                         message: '验证码错误！',
-        //                         type: 'error'
-        //                     })
-        //                 }
-        //             })
-        //         } else {
-        //             this.$message({
-        //                 message: '验证码错误！',
-        //                 type: 'error'
-        //             })
-        //         }
-        //     }
-        // },
-        confirmSubmission() {
-        if (this.isSubmitting) {
-            return; // 如果正在提交，直接返回
-        }
-        this.isSubmitting = true; // 设置标志位为true，表示开始提交
+        confirmSubmission () {
+            if (this.isSubmitting) {
+                return; // 如果正在提交，直接返回
+            }
+            this.isSubmitting = true; // 设置标志位为true，表示开始提交
 
-        if (this.VerificationCode === "") {
-            alert("请输入验证码！");
-            this.isSubmitting = false; // 重置标志位
-            return;
-        }
+            if (this.VerificationCode === "") {
+                alert("请输入验证码！");
+                this.isSubmitting = false; // 重置标志位
+                return;
+            }
 
-        if (!isNaN(Number(this.VerificationCode))) {
-            axios.post(this.$url + "/ContentManagement/checkVerificationCode", {
-                "UserPowerCheck": {
-                    "id": this.$user.userName,
-                    "token": this.$user.token,
-                },
-                "UserVerificationCode": {
-                    "mail": this.$user.userName,
-                    "Code": this.VerificationCode
-                }
-            }).then(response => {
-                if (response.data.data) {
-                    // 验证成功，处理提交
-                    this.VerificationCode = "";
-                    this.showConfirmTable = false;
-                    clearInterval(this.timer);
-                    this.getVerificationCode = false;
-                    this.getVerificationCodeColor = "color: black;";
-                    this.themeOp = { name: "", func: "confirm" };
-                } else {
+            if (!isNaN(Number(this.VerificationCode))) {
+                axios.post(this.$url + "/ContentManagement/checkVerificationCode", {
+                    "UserPowerCheck": {
+                        "id": this.$user.userName,
+                        "token": this.$user.token,
+                    },
+                    "UserVerificationCode": {
+                        "mail": this.$user.userName,
+                        "Code": this.VerificationCode
+                    }
+                }).then(response => {
+                    if (response.data.data) {
+                        // 验证成功，处理提交
+                        this.VerificationCode = "";
+                        this.showConfirmTable = false;
+                        clearInterval(this.timer);
+                        this.getVerificationCode = false;
+                        this.getVerificationCodeColor = "color: black;";
+                        this.themeOp = { name: "", func: "confirm" };
+                        
+                    } else {
+                        this.$message({
+                            message: '验证码错误！',
+                            type: 'error'
+                        });
+                    }
+                    this.isSubmitting = false; // 重置标志位
+                }).catch(error => {
                     this.$message({
-                        message: '验证码错误！',
+                        message: '请求失败，原因：' + error.message,
                         type: 'error'
                     });
-                }
-                this.isSubmitting = false; // 重置标志位
-            }).catch(error => {
+                    this.isSubmitting = false; // 重置标志位
+                });
+            } else {
                 this.$message({
-                    message: '请求失败，原因：' + error.message,
+                    message: '验证码错误！',
                     type: 'error'
                 });
                 this.isSubmitting = false; // 重置标志位
-            });
-        } else {
-            this.$message({
-                message: '验证码错误！',
-                type: 'error'
-            });
-            this.isSubmitting = false; // 重置标志位
-        }
-    },
+            }
+        },
         cancelSubmission: function () {
             this.$data.pwd = ""
             this.$data.showConfirmTable = false
@@ -368,7 +330,7 @@ export default {
             this.$data.getVerificationCodeColor = "color: black;"
         }
     },
-    beforeDestroy() {
+    beforeDestroy () {
         clearInterval(this.timer)
     },
 

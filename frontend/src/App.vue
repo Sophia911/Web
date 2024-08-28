@@ -38,6 +38,7 @@
 <script>
 import axios from 'axios';
 import { ref, getCurrentInstance, reactive, onMounted } from 'vue';
+import {themeBus} from './eventBus.js'
 import "../node_modules/swiper/swiper-bundle.min.css"
 import unLogin from "./imgs/unLogin01.png";
 import LoginDialog from './components/LoginDialog.vue';
@@ -76,7 +77,7 @@ export default {
     })
     jump_list.push({ url: "/home", name: "首页", is_focus: "link-blur" })
     jump_list.push({ url: "/upload", name: "上传视频", is_focus: "link-blur" })
-    jump_list.push({url:"/about",name:"关于",is_focus:"link-blur"})
+    jump_list.push({url:"/about",name:"主题信息",is_focus:"link-blur"})
     jump_list.push({ url: "/article", name: "个人文章", is_focus: "link-blur" })
     jump_list.push({ url: "/contentManagement", name: "内容管理", is_focus: "link-blur" })
     onMounted(async () => {
@@ -110,10 +111,16 @@ export default {
     }
   },
   methods: {
-    selectTheme: function (obj) {
+      selectTheme: function (obj) {
+        const cns = getCurrentInstance()
       this.$theme = this.$data.theme
       console.log("change" + this.$theme)
       localStorage.setItem('theme', this.$theme)
+      themeBus.value=this.$theme
+      console.log(localStorage.theme)
+      // cns.appContext.config.globalProperties.$theme=this.$theme
+      // location.reload()
+
     },
     //点击搜索触发函数
     clickSearch: function () {

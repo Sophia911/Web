@@ -20,23 +20,13 @@
     cd backend
     ```
 
-2. **配置数据库**：
-
-    修改`src/main/resources/application.properties`文件，配置数据库连接信息：
-
-    ```properties
-    spring.datasource.url=jdbc:mysql://localhost:3306/your_database_name?useSSL=false&serverTimezone=UTC
-    spring.datasource.username=your_username
-    spring.datasource.password=your_password
-    ```
-
-3. **构建并运行后端**：
+2. **构建并运行后端**：
 
     使用Maven构建项目并启动Spring Boot应用：
     运行SeBackEndApplication.java
 
 
-4. **访问后端服务**：
+3. **访问后端服务**：
 
     在浏览器中访问 `http://localhost:8080`，验证后端服务是否正常启动。
 

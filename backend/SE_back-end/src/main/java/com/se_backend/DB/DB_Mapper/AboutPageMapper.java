@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface AboutPageMapper {
      @Select("select id from Theme where name=#{theme_name}")
-     int get_themeID(String theme_name);
+     Integer get_themeID(String theme_name);
      @Select("select AboutPageID from Webpage where themeID=#{themeID}")
-     int get_aboutPageID(int themeID);
+     Integer get_aboutPageID(int themeID);
      @Select("select backgroundImg,title,description from AboutPage where aboutPageId = #{aboutPageId}")
      AboutHead select_aboutHead(AboutHead aboutHead);
 

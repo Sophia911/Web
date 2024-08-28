@@ -11,4 +11,7 @@ import java.util.ArrayList;
 public interface InterceptorUerRoleMapper {
     @Select("Select * from UserRole where UserID=#{UserID}")
     ArrayList<UserRole> getUserAllRole(@Param("UserID")String UsrID);
+
+    @Select("Select name from Role where id=#{id} limit 1")
+    String getUserRoleName(@Param("id")Integer id);
 }

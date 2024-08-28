@@ -11,6 +11,20 @@ public class UserObject {
     private String avatar;
     @JsonProperty(value = "background")
     private String background;
+    private String name;
+    private int introduction;
+
+    public UserObject(String id) {
+        this.id = id;
+    }
+    public UserObject(){}
+    public void setIntroduction(int introduction) {
+        this.introduction = introduction;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getAvatar() {
         return avatar;

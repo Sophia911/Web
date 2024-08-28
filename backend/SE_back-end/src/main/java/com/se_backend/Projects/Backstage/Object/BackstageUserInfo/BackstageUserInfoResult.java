@@ -1,6 +1,6 @@
 package com.se_backend.Projects.Backstage.Object.BackstageUserInfo;
 
-import com.se_backend.DB.DB_object.UserRole;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ public class BackstageUserInfoResult {
 
     private int total;
 
+    @JsonProperty(value = "items")
     private ArrayList<BackstageUserInfo> user;
 
     public int getTotal() {

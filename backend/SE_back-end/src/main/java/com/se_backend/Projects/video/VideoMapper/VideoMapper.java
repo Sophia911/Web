@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface VideoMapper {
 
-    @Insert("Insert into Video values( null,#{owner_id},#{name},#{url},now(),#{type},#{pic_id})")
+    @Insert("Insert into Video values( null,#{owner_id},#{name},#{url},now(),#{type},#{pic_id},'wait','sys')")
     int Insert_video(Video video);
 
 }

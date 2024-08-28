@@ -1,5 +1,6 @@
 package com.se_backend.Projects.User;
 
+import com.se_backend.Projects.User_project.UserPage;
 import org.apache.ibatis.annotations.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,4 +26,7 @@ public interface UserMapper {
 
     @Update("Update User set password = #{password} where id = #{id}")
     int Update(UserObject userObject);
+
+    @Select("select * from User where id=#{id}")
+    UserPage searchUser(@Param("id")String id);
 }

@@ -22,20 +22,17 @@ public class AboutController{
     AboutInfo get_about_info(@RequestBody ThemeInfo themeInfo ){
         String theme_name=themeInfo.getThemeName();
         AboutInfo aboutInfo=new AboutInfo();
-        System.out.println(theme_name);
-        int themeID = aboutPageMapper.get_themeID(theme_name);
-        System.out.println(themeID);
-        int aboutID= aboutPageMapper.get_aboutPageID(themeID);
-        System.out.println(aboutID);
-
+        Integer themeID = aboutPageMapper.get_themeID(theme_name);
+        Integer aboutID= aboutPageMapper.get_aboutPageID(themeID);
+        if(aboutID==null){
+            aboutID = 1;
+        }
         AboutHead aboutHead=new AboutHead();
         aboutHead.set_Id(aboutID);
         aboutHead=aboutPageMapper.select_aboutHead(aboutHead);
-        System.out.println("yes i got it !aboutID");
         aboutInfo.set_background(aboutHead.get_background());
         aboutInfo.set_title(aboutHead.get_title());
         aboutInfo.set_describe(aboutHead.get_description());
-
         ArrayList<ModuleInfo> tempShowList=new ArrayList<>();
         for(ModuleInfo perModuleInfo:moduleInfoMapper.select_modulesInfo_byID(aboutID)
         ){

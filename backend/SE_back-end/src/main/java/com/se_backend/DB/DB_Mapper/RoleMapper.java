@@ -8,4 +8,8 @@ import org.apache.ibatis.annotations.Select;
 public interface RoleMapper {
     @Select("select name from Role where id = #{id}")
     String getName(@Param("id") int id);
+
+    @Select("select name from Role where id=#{id}")
+    String getRoleNameById(@Param("id")String id);
+
 }

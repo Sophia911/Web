@@ -9,6 +9,8 @@ import com.se_backend.Interceptor.InterceptorMapper.InterceptorRolePowerMapper;
 import com.se_backend.Interceptor.InterceptorMapper.InterceptorURLPowerNeedMapper;
 import com.se_backend.Interceptor.InterceptorMapper.InterceptorUerRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,6 +39,17 @@ public class PowerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //处理跨域
+        if (HttpMethod.OPTIONS.toString().equals(request.getMethod())) {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS");
+            response.setHeader("Access-Control-Max-Age", "86400");
+            response.setHeader("Access-Control-Allow-Headers", "*");
+            response.setStatus(HttpStatus.NO_CONTENT.value());
+            System.out.println("OPTIONS end");
+            return false;
+        }
         RequestReaderHttpServletRequestWrapper wrapper = new RequestReaderHttpServletRequestWrapper(request);
         String bodyParams = wrapper.inputStream2String(wrapper.getInputStream());
         Matcher PowerCheck = p_UserPowerCheck.matcher(bodyParams);
@@ -47,28 +60,28 @@ public class PowerInterceptor implements HandlerInterceptor {
             UserPowerCheck UserPowerCheck = objectMapper.readValue(UserPowerCheckString,UserPowerCheck.class);
             //验证密钥
             if(userTokenMapper.CheckToken(new UserToken(UserPowerCheck.getId(),UserPowerCheck.getToken()))!=null){
-                    ArrayList<UserRole> UerRoles = interceptorUerRoleMapper.getUserAllRole(UserPowerCheck.getId());
-                    ArrayList<Integer> PowerID;
-                    Map<Integer,Boolean> powerMap = new HashMap<>();
-                    //生成用户权限哈希表
-                    for (UserRole UerRole:UerRoles
-                         ) {
-                        PowerID = interceptorRolePowerMapper.GetPowerID(UerRole.getRoleID());
-                        for (Integer powerID:PowerID
-                             ) {
-                            if(!powerMap.containsKey(powerID)){
-                                powerMap.put(powerID,true);
-                            }
+                ArrayList<UserRole> UerRoles = interceptorUerRoleMapper.getUserAllRole(UserPowerCheck.getId());
+                ArrayList<Integer> PowerID;
+                Map<Integer,Boolean> powerMap = new HashMap<>();
+                //生成用户权限哈希表
+                for (UserRole UerRole:UerRoles
+                ) {
+                    PowerID = interceptorRolePowerMapper.GetPowerID(UerRole.getRoleID());
+                    for (Integer powerID:PowerID
+                    ) {
+                        if(!powerMap.containsKey(powerID)){
+                            powerMap.put(powerID,true);
                         }
                     }
-                    //获取路由+方法所需权限清单
-                    ArrayList<URLPowers> Powers= interceptorURLPowerNeedMapper.GetURLPowers(request.getRequestURI(),request.getMethod());
-                    //验证路由+方法权限与用户权限是否匹配
+                }
+                //获取路由+方法所需权限清单
+                ArrayList<URLPowers> Powers= interceptorURLPowerNeedMapper.GetURLPowers(request.getRequestURI(),request.getMethod());
+                //验证路由+方法权限与用户权限是否匹配
                 for (URLPowers power:Powers
-                         ) {
+                ) {
                     if(!powerMap.containsKey(power.getPowerNeed())) {
-                            System.out.println("权限验证失败 "+power.getPowerNeed());
-                            return false;
+                        System.out.println("权限验证失败 "+power.getPowerNeed());
+                        return false;
                     }
                 }
                 System.out.println("权限验证通过 ");

@@ -10,6 +10,6 @@ import java.util.ArrayList;
 @Mapper
 @Transactional
 public interface VideoInterfaceMapper {
-    @Select("Select * from Video order by rand() limit 20")
+    @Select("Select * from Video where AuditStatus='pass' order by rand() limit 20")
     ArrayList<VideoInterface> get_Some_video();
 }

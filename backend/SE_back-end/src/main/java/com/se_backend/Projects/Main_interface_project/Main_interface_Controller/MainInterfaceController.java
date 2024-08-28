@@ -10,9 +10,19 @@ import org.springframework.web.bind.annotation.*;
 public class MainInterfaceController {
     @Autowired
     private MainInterfaceMapper mainInterfaceMapper;
-    @GetMapping
-    Result get_all_url(){
-        return new Result("ok","1000",mainInterfaceMapper.SelectAllUrl());
+    @PostMapping("/getBaseURL")
+    Result getBaseURL(@RequestBody theme theme2){
+        System.out.println("theme:"+theme2);
+        Integer ThemeID = mainInterfaceMapper.getThemeID(theme2.Theme);
+        if(ThemeID == null)ThemeID = 1;
+        Integer VideoID = mainInterfaceMapper.getVideoPageID(ThemeID);
+        if(VideoID == null) VideoID = 1;
+        System.out.println("VideoID:"+VideoID);
+        return new Result("ok","1000",mainInterfaceMapper.getVideoPage(VideoID));
+    }
+    @GetMapping("/getThemes")
+    Result getTheme(){
+        return new Result("ok","1000",mainInterfaceMapper.SelectThemes());
     }
     @ExceptionHandler(Exception.class)
     public Result catchError(Exception ex){

@@ -9,8 +9,6 @@ public class UserPowerCheck {
      String id;
     @JsonProperty("token")
      String token;
-    @JsonProperty("powers")
-     ArrayList<String> powers;
 
     public String getId() {
         return id;
@@ -28,11 +26,11 @@ public class UserPowerCheck {
         this.token = token;
     }
 
-    public ArrayList<String> getPowers() {
-        return powers;
-    }
-
-    public void setPowers(ArrayList<String> powers) {
-        this.powers = powers;
+    @Override
+    public String toString() {
+        return "UserPowerCheck{" +
+                "id='" + id + '\'' +
+                ", token='" + token + '\'' +
+                '}';
     }
 }

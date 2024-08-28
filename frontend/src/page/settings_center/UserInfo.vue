@@ -6,7 +6,7 @@
   <div class="formbody">
     <div class="formtitle"><span>用户信息</span></div>
     <ul class="forminfo">
-      <li><label>头像</label><img :src="avatar"/></li>
+      <!-- <li><label>头像</label><img :src="avatar"/></li> -->
       <li><label>邮箱</label><input v-model="id" type="text" readonly="readonly" class="info"/></li>
       <li><label>名字</label><input v-model="name" type="text" readonly="readonly" class="info"/></li>
       <!--      <li><label>背景图</label><input v-model="introduction" type="text" readonly="readonly" class="info"/></li>-->

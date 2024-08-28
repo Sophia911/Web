@@ -77,7 +77,6 @@ export default {
       inofrom: [[]]
     })
     onMounted(async () => {
-      console.log(url)
       axios.get(url + "/VideoInterface", {}).then(response => {
         let i = 0
         response.data.data.forEach(element => {

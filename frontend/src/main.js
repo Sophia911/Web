@@ -10,7 +10,6 @@ import 'element-plus/dist/index.css';
 
 const app = createApp(App)
 app.config.globalProperties.$axios=axios;
-// app.config.globalProperties.$url="https://www.ichlearning.cn:8080/"
 app.config.globalProperties.$url="http://localhost:8080/"
 app.config.globalProperties.$user={userName:"user",key:"key",isLogin:false}
 app.config.globalProperties.$theme="西河大鼓"

@@ -12,7 +12,7 @@ const app = createApp(App)
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$url="http://localhost:8080/"
 app.config.globalProperties.$user={userName:"user",key:"key",isLogin:false}
-app.config.globalProperties.$theme="国画颜料制作"
+app.config.globalProperties.$theme="刺绣艺术"
 app.config.globalProperties.$themeList=[]
 app.use(router)
 app.use(vue3videoPlay);
